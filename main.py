@@ -23,6 +23,7 @@ def start():
         writer_object.writerow([type_research_start_logs, process_research_start_logs, int(round(time.time() * 1000))])
         research_start_logs.close()
 
+    global name_file
     name_file = type_research_start_logs + "_" + process_research_start_logs + ".csv"
     with open(name_file, mode="w", encoding='utf-8') as file:
         file_writer = writer(file, delimiter=",", lineterminator="\r")
@@ -32,7 +33,11 @@ def start():
 
 @app.route('/run')
 def run():
-    return 'Run OK'
+    with open(name_file, 'a', newline='') as file:
+        writer_object = writer(file)
+        writer_object.writerow([int(round(time.time() * 1000))])
+        file.close()
+    return name_file
 
 if __name__ == '__main__': 
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
